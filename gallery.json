@@ -584,37 +584,37 @@
     },
     {
       "file": "0019-sao-luis.jpg",
-      "city": "São Luís",
+      "city": "São Luís",
       "country": "Brazil"
     },
     {
       "file": "0020-sao-luis.jpg",
-      "city": "São Luís",
+      "city": "São Luís",
       "country": "Brazil"
     },
     {
       "file": "0021-sao-luis.jpg",
-      "city": "São Luís",
+      "city": "São Luís",
       "country": "Brazil"
     },
     {
       "file": "0023-sao-luis.jpg",
-      "city": "São Luís",
+      "city": "São Luís",
       "country": "Brazil"
     },
     {
       "file": "0027-sao-luis.jpg",
-      "city": "São Luís",
+      "city": "São Luís",
       "country": "Brazil"
     },
     {
       "file": "0061-sao-luis.jpg",
-      "city": "São Luís",
+      "city": "São Luís",
       "country": "Brazil"
     },
     {
       "file": "0070-sao-luis.jpg",
-      "city": "São Luís",
+      "city": "São Luís",
       "country": "Brazil"
     },
     {
@@ -680,6 +680,86 @@
     {
       "file": "0146-jijoca-de-jericoacoara.jpg",
       "city": "Jijoca de Jericoacoara",
+      "country": "Brazil"
+    },
+    {
+      "file": "0147-enkhuizen.jpg",
+      "city": "Enkhuizen",
+      "country": "Netherlands"
+    },
+    {
+      "file": "0148-enkhuizen.jpg",
+      "city": "Enkhuizen",
+      "country": "Netherlands"
+    },
+    {
+      "file": "0149-the-hague.jpg",
+      "city": "The Hague",
+      "country": "Netherlands"
+    },
+    {
+      "file": "0150-the-hague.jpg",
+      "city": "The Hague",
+      "country": "Netherlands"
+    },
+    {
+      "file": "0151-cochem.jpg",
+      "city": "Cochem",
+      "country": "Germany"
+    },
+    {
+      "file": "0152-natal.jpg",
+      "city": "Natal",
+      "country": "Brazil"
+    },
+    {
+      "file": "0153-natal.jpg",
+      "city": "Natal",
+      "country": "Brazil"
+    },
+    {
+      "file": "0154-sao-luis.jpg",
+      "city": "São Luís",
+      "country": "Brazil"
+    },
+    {
+      "file": "0155-sao-luis.jpg",
+      "city": "São Luís",
+      "country": "Brazil"
+    },
+    {
+      "file": "0156-sao-luis.jpg",
+      "city": "São Luís",
+      "country": "Brazil"
+    },
+    {
+      "file": "0157-pipa.jpg",
+      "city": "Pipa",
+      "country": "Brazil"
+    },
+    {
+      "file": "0158-pipa.jpg",
+      "city": "Pipa",
+      "country": "Brazil"
+    },
+    {
+      "file": "0159-sao-paulo.jpg",
+      "city": "São Paulo",
+      "country": "Brazil"
+    },
+    {
+      "file": "0160-sao-paulo.jpg",
+      "city": "São Paulo",
+      "country": "Brazil"
+    },
+    {
+      "file": "0161-puerto-iguazu.jpg",
+      "city": "Puerto Iguazú",
+      "country": "Argentina"
+    },
+    {
+      "file": "0162-olinda.jpg",
+      "city": "Olinda",
       "country": "Brazil"
     }
   ]

@@ -20,18 +20,19 @@ function render(data){
     const section=document.createElement("section"); section.className="country"; section.id="c-"+slugify(country);
     const cities=Object.keys(byCountry[country]).sort((a,b)=>a.localeCompare(b));
     const total=cities.reduce((n,c)=>n+byCountry[country][c].length,0);
-    section.innerHTML=`<h2 class="country__title">${COUNTRY_FLAG[country]||"📍"} ${COUNTRY_PT[country]||country}<span class="place__count"> · ${total} fotos</span></h2><div class="country__rule"></div>`;
+    section.innerHTML=`<div class="country__head"><h2 class="country__title"><span class="country__flag">${COUNTRY_FLAG[country]||"📍"}</span>${COUNTRY_PT[country]||country}</h2><span class="country__count">${total} fotos · ${cities.length} ${cities.length===1?"lugar":"lugares"}</span></div>`;
     cities.forEach(city=>{
       const list=byCountry[country][city];
       const place=document.createElement("div"); place.className="place";
       const head=document.createElement("div"); head.className="place__head";
-      head.innerHTML=`<h3 class="place__name">${city}</h3><span class="place__count">${list.length} ${list.length===1?"foto":"fotos"}</span>`;
+      head.innerHTML=`<h3 class="place__name">${city}</h3><span class="place__line"></span><span class="place__count">${list.length} ${list.length===1?"foto":"fotos"}</span>`;
       place.appendChild(head);
       const grid=document.createElement("div"); grid.className="grid";
-      list.forEach(p=>{
+      list.forEach((p,idxInPlace)=>{
         const idx=flatPhotos.length;
         flatPhotos.push({file:p.file, caption:`${city}, ${COUNTRY_PT[country]||country}`});
-        const item=document.createElement("div"); item.className="grid__item";
+        const item=document.createElement("div");
+        item.className = (list.length>=3 && idxInPlace===0) ? "grid__item grid__item--feature" : "grid__item";
         item.innerHTML=`<img loading="lazy" src="${p.file}" alt="${city}, ${country}" />`;
         item.addEventListener("click",()=>openLightbox(idx));
         grid.appendChild(item);
