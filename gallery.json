@@ -656,6 +656,11 @@
       "file": "0138-sao-paulo.jpg",
       "city": "São Paulo",
       "country": "Brazil"
+    },
+    {
+      "file": "0139-rio-de-janeiro.jpg",
+      "city": "Rio de Janeiro",
+      "country": "Brazil"
     }
   ]
 }
