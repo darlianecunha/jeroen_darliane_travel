@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeroen &amp; Darliane — Viagens</title>
+  <meta name="description" content="Galeria de viagens de Jeroen e Darliane, organizada por lugares." />
+  <meta property="og:title" content="Jeroen &amp; Darliane — Viagens" />
+  <meta property="og:description" content="Nossas viagens, lugar por lugar." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__inner">
+      <p class="hero__eyebrow">Diário de viagem</p>
+      <h1 class="hero__title">Jeroen &amp; Darliane</h1>
+      <p class="hero__subtitle">Nossas viagens, lugar por lugar</p>
+      <p class="hero__meta" id="heroMeta"></p>
+    </div>
+    <button class="hero__scroll" aria-label="Ver galeria" onclick="document.getElementById('nav').scrollIntoView({behavior:'smooth'})">↓</button>
+  </header>
+
+  <nav class="nav" id="nav" aria-label="Navegação por país"></nav>
+
+  <main id="gallery" class="gallery">
+    <p class="loading">Carregando fotos…</p>
+  </main>
+
+  <footer class="footer">
+    <p>Jeroen &amp; Darliane · <span id="year"></span></p>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Foto ampliada">
+    <button class="lightbox__close" id="lbClose" aria-label="Fechar">×</button>
+    <button class="lightbox__nav lightbox__prev" id="lbPrev" aria-label="Anterior">‹</button>
+    <figure class="lightbox__figure">
+      <img class="lightbox__img" id="lbImg" src="" alt="" />
+      <figcaption class="lightbox__caption" id="lbCaption"></figcaption>
+    </figure>
+    <button class="lightbox__nav lightbox__next" id="lbNext" aria-label="Próxima">›</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
