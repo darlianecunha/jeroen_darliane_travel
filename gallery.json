@@ -646,6 +646,11 @@
       "file": "0136-sao-paulo.jpg",
       "city": "São Paulo",
       "country": "Brazil"
+    },
+    {
+      "file": "0137-pipa.jpg",
+      "city": "Pipa",
+      "country": "Brazil"
     }
   ]
 }
