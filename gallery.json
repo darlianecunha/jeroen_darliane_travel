@@ -626,6 +626,11 @@
       "file": "0070-sao-luis.jpg",
       "city": "São Luís",
       "country": "Brazil"
+    },
+    {
+      "file": "0132-natal.jpg",
+      "city": "Natal",
+      "country": "Brazil"
     }
   ]
 }
