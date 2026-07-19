@@ -4,18 +4,18 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex" />
-<title>Painel — adicionar fotos</title>
+<title>Painel — fotos</title>
 <style>
-  :root{--ink:#1f2933;--muted:#6b7280;--line:#e6e0d8;--accent:#2f6f6a;--bg:#faf8f5;}
+  :root{--ink:#1f2933;--muted:#6b7280;--line:#e6e0d8;--accent:#2f6f6a;--bg:#faf8f5;--danger:#b23b3b;}
   *{box-sizing:border-box;} body{margin:0;font-family:system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);}
-  .wrap{max-width:620px;margin:0 auto;padding:2rem 1.25rem 4rem;}
+  .wrap{max-width:660px;margin:0 auto;padding:2rem 1.25rem 4rem;}
   h1{font-size:1.5rem;margin:.2rem 0 .3rem;} p.sub{color:var(--muted);margin:0 0 1.5rem;}
   .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.2rem;margin-bottom:1.2rem;}
   .card h2{font-size:1rem;margin:0 0 .8rem;}
   label{display:block;font-size:.85rem;font-weight:600;margin:.7rem 0 .3rem;}
   input,select,button{font-size:1rem;font-family:inherit;}
   input,select{width:100%;padding:.6rem .7rem;border:1px solid var(--line);border-radius:8px;background:#fff;}
-  button{cursor:pointer;border:none;border-radius:8px;padding:.75rem 1.1rem;font-weight:600;}
+  button{cursor:pointer;border:none;border-radius:8px;padding:.7rem 1rem;font-weight:600;}
   .btn-primary{background:var(--accent);color:#fff;width:100%;margin-top:1rem;}
   .btn-primary:disabled{opacity:.5;cursor:default;}
   .btn-ghost{background:#eee9e2;color:var(--ink);}
@@ -27,13 +27,22 @@
   #status.info{display:block;background:#eef2f7;color:#33506e;}
   #preview{max-width:100%;border-radius:8px;margin-top:.6rem;display:none;}
   a.back{color:var(--accent);font-size:.85rem;text-decoration:none;}
+  .tabs{display:flex;gap:.5rem;margin-bottom:1rem;}
+  .tabs button{background:#eee9e2;color:var(--ink);flex:1;}
+  .tabs button.active{background:var(--accent);color:#fff;}
+  .panel{display:none;} .panel.active{display:block;}
+  .item{display:flex;align-items:center;gap:.7rem;padding:.5rem;border:1px solid var(--line);border-radius:8px;margin-bottom:.5rem;}
+  .item img{width:64px;height:48px;object-fit:cover;border-radius:5px;background:#eee;}
+  .item .meta{flex:1;font-size:.88rem;} .item .meta small{color:var(--muted);}
+  .item button{background:#fbeaea;color:var(--danger);padding:.45rem .7rem;font-size:.85rem;}
+  #listStatus{font-size:.85rem;color:var(--muted);margin:.4rem 0;}
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="back" href="index.html">← ver o site</a>
-  <h1>Adicionar fotos</h1>
-  <p class="sub">Escolha a foto, informe o local e envie. Ela aparece no site em alguns segundos.</p>
+  <h1>Painel de fotos</h1>
+  <p class="sub">Adicione ou remova fotos. As mudanças aparecem no site em alguns segundos.</p>
 
   <div class="card" id="configCard">
     <h2>Configuração (uma vez só)</h2>
@@ -42,12 +51,17 @@
     <p class="hint">Fica guardado só neste navegador. Nunca vai para o site.</p>
     <div class="row">
       <div><label>Usuário/Org</label><input id="cfgOwner" placeholder="darlianecunha" /></div>
-      <div><label>Repositório</label><input id="cfgRepo" placeholder="viagens2" /></div>
+      <div><label>Repositório</label><input id="cfgRepo" placeholder="jeroen_darliane_travel" /></div>
     </div>
     <button class="btn-ghost" onclick="saveConfig()" style="margin-top:1rem;">Salvar configuração</button>
   </div>
 
-  <div class="card">
+  <div class="tabs">
+    <button id="tabAdd" class="active" onclick="tab('add')">Adicionar foto</button>
+    <button id="tabManage" onclick="tab('manage')">Remover fotos</button>
+  </div>
+
+  <div class="card panel active" id="panelAdd">
     <h2>Nova foto</h2>
     <label>Foto (JPG ou PNG)</label>
     <input id="file" type="file" accept="image/jpeg,image/png,image/webp" />
@@ -69,6 +83,13 @@
     <button class="btn-primary" id="sendBtn" onclick="upload()">Enviar foto</button>
     <div id="status"></div>
   </div>
+
+  <div class="card panel" id="panelManage">
+    <h2>Fotos no site</h2>
+    <button class="btn-ghost" onclick="loadList()">Atualizar lista</button>
+    <div id="listStatus"></div>
+    <div id="list"></div>
+  </div>
 </div>
 
 <script>
@@ -79,43 +100,53 @@ function saveConfig(){
   localStorage.setItem("gh_token",cfgToken.value.trim());
   localStorage.setItem("gh_owner",cfgOwner.value.trim());
   localStorage.setItem("gh_repo",cfgRepo.value.trim());
-  setStatus("info","Configuração salva neste navegador.");
-  loadCities();
+  setStatus("info","Configuração salva neste navegador."); loadCities();
 }
 function setStatus(type,msg){ const s=document.getElementById("status"); s.className=type; s.textContent=msg; }
 function b64u(str){ return btoa(unescape(encodeURIComponent(str))); }
 function unb64u(str){ return decodeURIComponent(escape(atob(str.replace(/\n/g,"")))); }
 function slug(s){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"")||"foto"; }
+const PT={Netherlands:"Holanda",Belgium:"Bélgica",Germany:"Alemanha",Austria:"Áustria",Brazil:"Brasil",Other:"Outros"};
+
+function tab(which){
+  document.getElementById("panelAdd").classList.toggle("active",which==="add");
+  document.getElementById("panelManage").classList.toggle("active",which==="manage");
+  document.getElementById("tabAdd").classList.toggle("active",which==="add");
+  document.getElementById("tabManage").classList.toggle("active",which==="manage");
+  if(which==="manage") loadList();
+}
 
 document.getElementById("file").addEventListener("change",e=>{
   const f=e.target.files[0]; if(!f) return;
-  const url=URL.createObjectURL(f); const img=document.getElementById("preview"); img.src=url; img.style.display="block";
+  const img=document.getElementById("preview"); img.src=URL.createObjectURL(f); img.style.display="block";
 });
 
 async function ghGet(path){
   const c=cfg();
   const r=await fetch(`${API}/repos/${c.owner}/${c.repo}/contents/${path}?ref=main`,{headers:{Authorization:`Bearer ${c.token}`,Accept:"application/vnd.github+json"}});
   if(r.status===404) return null;
-  if(!r.ok) throw new Error("GitHub GET "+r.status+" "+(await r.text()).slice(0,120));
+  if(!r.ok) throw new Error("GET "+r.status+" "+(await r.text()).slice(0,120));
   return r.json();
 }
 async function ghPut(path,contentB64,message,sha){
-  const c=cfg();
-  const body={message,content:contentB64,branch:"main"}; if(sha) body.sha=sha;
+  const c=cfg(); const body={message,content:contentB64,branch:"main"}; if(sha) body.sha=sha;
   const r=await fetch(`${API}/repos/${c.owner}/${c.repo}/contents/${path}`,{method:"PUT",headers:{Authorization:`Bearer ${c.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json"},body:JSON.stringify(body)});
-  if(!r.ok) throw new Error("GitHub PUT "+r.status+" "+(await r.text()).slice(0,160));
+  if(!r.ok) throw new Error("PUT "+r.status+" "+(await r.text()).slice(0,160));
+  return r.json();
+}
+async function ghDelete(path,sha,message){
+  const c=cfg();
+  const r=await fetch(`${API}/repos/${c.owner}/${c.repo}/contents/${path}`,{method:"DELETE",headers:{Authorization:`Bearer ${c.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json"},body:JSON.stringify({message,sha,branch:"main"})});
+  if(!r.ok) throw new Error("DELETE "+r.status+" "+(await r.text()).slice(0,160));
   return r.json();
 }
 function resize(file,max){
   return new Promise((res,rej)=>{
     const img=new Image();
-    img.onload=()=>{
-      let{width:w,height:h}=img;
+    img.onload=()=>{ let{width:w,height:h}=img;
       if(Math.max(w,h)>max){ if(w>=h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;} }
-      const cv=document.createElement("canvas"); cv.width=w; cv.height=h;
-      cv.getContext("2d").drawImage(img,0,0,w,h);
-      try{ res(cv.toDataURL("image/jpeg",0.72).split(",")[1]); }catch(err){ rej(err); }
-    };
+      const cv=document.createElement("canvas"); cv.width=w; cv.height=h; cv.getContext("2d").drawImage(img,0,0,w,h);
+      try{ res(cv.toDataURL("image/jpeg",0.72).split(",")[1]); }catch(err){ rej(err); } };
     img.onerror=()=>rej(new Error("Não consegui ler a imagem. Use JPG ou PNG (HEIC não funciona)."));
     img.src=URL.createObjectURL(file);
   });
@@ -140,10 +171,8 @@ async function upload(){
     setStatus("info","Preparando a imagem…");
     const imgB64=await resize(file,1000);
     setStatus("info","Lendo a galeria…");
-    const g=await ghGet("gallery.json");
-    if(!g) throw new Error("gallery.json não encontrado no repositório.");
-    const data=JSON.parse(unb64u(g.content));
-    data.photos=data.photos||[];
+    const g=await ghGet("gallery.json"); if(!g) throw new Error("gallery.json não encontrado.");
+    const data=JSON.parse(unb64u(g.content)); data.photos=data.photos||[];
     const nums=data.photos.map(p=>parseInt((p.file.match(/^(\d+)/)||[])[1])||0);
     const next=String((Math.max(0,...nums)+1)).padStart(4,"0");
     const fname=`${next}-${slug(city)}.jpg`;
@@ -153,10 +182,39 @@ async function upload(){
     setStatus("info","Atualizando a galeria…");
     await ghPut("gallery.json",b64u(JSON.stringify(data,null,2)),`Atualiza galeria (${fname})`,g.sha);
     setStatus("ok","Pronto! A foto foi adicionada. O site atualiza em ~30 segundos.");
-    document.getElementById("file").value=""; document.getElementById("preview").style.display="none";
-    document.getElementById("city").value=""; loadCities();
+    document.getElementById("file").value=""; document.getElementById("preview").style.display="none"; document.getElementById("city").value=""; loadCities();
   }catch(e){ setStatus("err","Erro: "+e.message); }
   btn.disabled=false;
+}
+async function loadList(){
+  const c=cfg(); const box=document.getElementById("list"); const st=document.getElementById("listStatus");
+  if(!c.token||!c.owner||!c.repo){ st.textContent="Preencha e salve a configuração primeiro."; return; }
+  st.textContent="Carregando…"; box.innerHTML="";
+  try{
+    const g=await ghGet("gallery.json"); if(!g){ st.textContent="gallery.json não encontrado."; return; }
+    const data=JSON.parse(unb64u(g.content)); const photos=data.photos||[];
+    st.textContent=`${photos.length} fotos no site.`;
+    photos.slice().reverse().forEach(p=>{
+      const div=document.createElement("div"); div.className="item";
+      div.innerHTML=`<img src="${p.file}" alt="" /><div class="meta"><strong>${p.city}</strong><br><small>${PT[p.country]||p.country} · ${p.file}</small></div>`;
+      const b=document.createElement("button"); b.textContent="Excluir"; b.onclick=()=>del(p.file);
+      div.appendChild(b); box.appendChild(div);
+    });
+  }catch(e){ st.textContent="Erro: "+e.message; }
+}
+async function del(file){
+  if(!confirm("Excluir esta foto do site?\n\n"+file)) return;
+  const st=document.getElementById("listStatus");
+  try{
+    st.textContent="Excluindo "+file+"…";
+    const meta=await ghGet(file);
+    if(meta&&meta.sha){ await ghDelete(file,meta.sha,`Remove ${file}`); }
+    const g=await ghGet("gallery.json"); const data=JSON.parse(unb64u(g.content));
+    data.photos=(data.photos||[]).filter(p=>p.file!==file);
+    await ghPut("gallery.json",b64u(JSON.stringify(data,null,2)),`Remove ${file} da galeria`,g.sha);
+    st.textContent="Foto removida. O site atualiza em ~30 segundos.";
+    loadList(); loadCities();
+  }catch(e){ st.textContent="Erro: "+e.message; }
 }
 loadConfig(); loadCities();
 </script>
