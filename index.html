@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jeroen &amp; Darliane — Viagens</title>
-  <meta name="description" content="Galeria de viagens de Jeroen e Darliane, organizada por lugares." />
-  <meta property="og:title" content="Jeroen &amp; Darliane — Viagens" />
-  <meta property="og:description" content="Nossas viagens, lugar por lugar." />
+  <title>Jeroen &amp; Darliane — Aventuras</title>
+  <meta name="description" content="As aventuras de Jeroen e Darliane, lugar por lugar." />
+  <meta property="og:title" content="Jeroen &amp; Darliane — Aventuras" />
+  <meta property="og:description" content="Nossas aventuras, lugar por lugar." />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,11 +14,77 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Ímãs de geladeira decorativos (desenhos originais) -->
+  <div class="magnets" aria-hidden="true">
+    <!-- Holanda: moinho + tulipa -->
+    <svg class="magnet m1" viewBox="0 0 100 100">
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#fff" stroke="#d9d2c8"/>
+      <rect x="6" y="6" width="88" height="13" rx="6" fill="#AE1C28"/>
+      <rect x="6" y="81" width="88" height="13" rx="6" fill="#21468B"/>
+      <path d="M50 34 L60 70 H40 Z" fill="#e8e2d8" stroke="#9aa3ab" stroke-width="2"/>
+      <g stroke="#6b7280" stroke-width="3.5" stroke-linecap="round">
+        <line x1="50" y1="34" x2="34" y2="22"/><line x1="50" y1="34" x2="66" y2="22"/>
+        <line x1="50" y1="34" x2="34" y2="46"/><line x1="50" y1="34" x2="66" y2="46"/>
+      </g>
+    </svg>
+    <!-- Bélgica: waffle -->
+    <svg class="magnet m2" viewBox="0 0 100 100">
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#fff" stroke="#d9d2c8"/>
+      <rect x="6" y="6" width="29" height="88" fill="#2d2a26"/>
+      <rect x="35" y="6" width="29" height="88" fill="#F7D117"/>
+      <rect x="64" y="6" width="30" height="88" fill="#C8102E"/>
+      <rect x="24" y="30" width="52" height="40" rx="9" fill="#e8b168" stroke="#b8823c" stroke-width="2.5"/>
+      <g stroke="#b8823c" stroke-width="2.5"><line x1="41" y1="30" x2="41" y2="70"/><line x1="58" y1="30" x2="58" y2="70"/><line x1="24" y1="50" x2="76" y2="50"/></g>
+    </svg>
+    <!-- Alemanha: pretzel -->
+    <svg class="magnet m3" viewBox="0 0 100 100">
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#fff" stroke="#d9d2c8"/>
+      <rect x="6" y="6" width="88" height="29" rx="6" fill="#2d2a26"/>
+      <rect x="6" y="35" width="88" height="29" fill="#DD0000"/>
+      <rect x="6" y="64" width="88" height="30" rx="6" fill="#FFCE00"/>
+      <path d="M34 40 C26 54 38 70 50 62 C62 70 74 54 66 40 C60 32 50 44 50 52 C50 44 40 32 34 40 Z"
+            fill="none" stroke="#8a5a2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <!-- Áustria: montanha -->
+    <svg class="magnet m4" viewBox="0 0 100 100">
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#fff" stroke="#d9d2c8"/>
+      <rect x="6" y="6" width="88" height="16" rx="6" fill="#ED2939"/>
+      <rect x="6" y="78" width="88" height="16" rx="6" fill="#ED2939"/>
+      <path d="M20 74 L42 36 L56 58 L66 44 L82 74 Z" fill="#8fa6b8"/>
+      <path d="M42 36 L33 52 H51 Z M66 44 L60 54 H73 Z" fill="#fff"/>
+    </svg>
+    <!-- Brasil: palmeira e sol -->
+    <svg class="magnet m5" viewBox="0 0 100 100">
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#fff" stroke="#d9d2c8"/>
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#009B3A"/>
+      <path d="M50 16 L88 50 L50 84 L12 50 Z" fill="#FEDF00"/>
+      <circle cx="50" cy="50" r="17" fill="#002776"/>
+      <path d="M35 46 C43 41 57 41 65 46" stroke="#fff" stroke-width="3" fill="none"/>
+    </svg>
+    <!-- Câmera -->
+    <svg class="magnet m6" viewBox="0 0 100 100">
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#fff" stroke="#d9d2c8"/>
+      <rect x="16" y="34" width="68" height="42" rx="8" fill="#2f6f6a"/>
+      <rect x="38" y="26" width="24" height="10" rx="4" fill="#2f6f6a"/>
+      <circle cx="50" cy="55" r="14" fill="#faf8f5"/><circle cx="50" cy="55" r="7" fill="#2f6f6a"/>
+    </svg>
+    <!-- Avião -->
+    <svg class="magnet m7" viewBox="0 0 100 100">
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#fff" stroke="#d9d2c8"/>
+      <path d="M50 16 C55 26 56 36 56 44 L84 62 V70 L56 60 V74 L66 82 V88 L50 82 L34 88 V82 L44 74 V60 L16 70 V62 L44 44 C44 36 45 26 50 16 Z" fill="#5b8fb0"/>
+    </svg>
+    <!-- Coração -->
+    <svg class="magnet m8" viewBox="0 0 100 100">
+      <rect x="6" y="6" width="88" height="88" rx="14" fill="#fff" stroke="#d9d2c8"/>
+      <path d="M50 78 C22 60 20 42 32 34 C41 28 48 34 50 40 C52 34 59 28 68 34 C80 42 78 60 50 78 Z" fill="#d4726a"/>
+    </svg>
+  </div>
+
   <header class="hero">
     <div class="hero__inner">
-      <p class="hero__eyebrow">Diário de viagem</p>
+      <p class="hero__eyebrow">Aventuras</p>
       <h1 class="hero__title">Jeroen &amp; Darliane</h1>
-      <p class="hero__subtitle">Nossas viagens, lugar por lugar</p>
+      <p class="hero__subtitle">Nossas aventuras, lugar por lugar</p>
       <p class="hero__meta" id="heroMeta"></p>
     </div>
     <button class="hero__scroll" aria-label="Ver galeria" onclick="document.getElementById('nav').scrollIntoView({behavior:'smooth'})">↓</button>
@@ -34,7 +100,6 @@
     <p>Jeroen &amp; Darliane · <span id="year"></span></p>
   </footer>
 
-  <!-- Lightbox -->
   <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Foto ampliada">
     <button class="lightbox__close" id="lbClose" aria-label="Fechar">×</button>
     <button class="lightbox__nav lightbox__prev" id="lbPrev" aria-label="Anterior">‹</button>

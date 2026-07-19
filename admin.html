@@ -120,7 +120,7 @@ document.getElementById("file").addEventListener("change",e=>{
 
 async function ghGet(path){
   const c=cfg();
-  const r=await fetch(`${API}/repos/${c.owner}/${c.repo}/contents/${path}?ref=main`,{headers:{Authorization:`Bearer ${c.token}`,Accept:"application/vnd.github+json"}});
+  const r=await fetch(`${API}/repos/${c.owner}/${c.repo}/contents/${path}?ref=main&_=${Date.now()}`,{cache:"no-store",headers:{Authorization:`Bearer ${c.token}`,Accept:"application/vnd.github+json","Cache-Control":"no-cache"}});
   if(r.status===404) return null;
   if(!r.ok) throw new Error("GET "+r.status+" "+(await r.text()).slice(0,120));
   return r.json();
@@ -136,6 +136,24 @@ async function ghDelete(path,sha,message){
   const r=await fetch(`${API}/repos/${c.owner}/${c.repo}/contents/${path}`,{method:"DELETE",headers:{Authorization:`Bearer ${c.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json"},body:JSON.stringify({message,sha,branch:"main"})});
   if(!r.ok) throw new Error("DELETE "+r.status+" "+(await r.text()).slice(0,160));
   return r.json();
+}
+async function updateGallery(mutate,message){
+  let lastErr;
+  for(let i=0;i<4;i++){
+    const g=await ghGet("gallery.json");
+    if(!g) throw new Error("gallery.json não encontrado.");
+    const data=JSON.parse(unb64u(g.content));
+    data.photos=data.photos||[];
+    mutate(data);
+    try{
+      await ghPut("gallery.json",b64u(JSON.stringify(data,null,2)),message,g.sha);
+      return data;
+    }catch(e){
+      if(String(e.message).includes("409")){ lastErr=e; await new Promise(r=>setTimeout(r,1000)); continue; }
+      throw e;
+    }
+  }
+  throw lastErr||new Error("Conflito ao atualizar a galeria. Tente de novo.");
 }
 function resize(file,max){
   return new Promise((res,rej)=>{
@@ -179,9 +197,8 @@ async function upload(){
     const fname=`${next}-${slug(city)}.jpg`;
     setStatus("info","Enviando a foto…");
     await ghPut(fname,imgB64,`Adiciona ${fname}`);
-    data.photos.push({file:fname,city,country});
     setStatus("info","Atualizando a galeria…");
-    await ghPut("gallery.json",b64u(JSON.stringify(data,null,2)),`Atualiza galeria (${fname})`,g.sha);
+    await updateGallery(d=>{ d.photos.push({file:fname,city,country}); }, `Atualiza galeria (${fname})`);
     setStatus("ok","Pronto! A foto foi adicionada. O site atualiza em ~30 segundos.");
     document.getElementById("file").value=""; document.getElementById("preview").style.display="none"; document.getElementById("city").value=""; loadCities();
   }catch(e){ setStatus("err","Erro: "+e.message); }
@@ -208,11 +225,8 @@ async function del(file){
   const st=document.getElementById("listStatus");
   try{
     st.textContent="Excluindo "+file+"…";
-    const meta=await ghGet(file);
-    if(meta&&meta.sha){ await ghDelete(file,meta.sha,`Remove ${file}`); }
-    const g=await ghGet("gallery.json"); const data=JSON.parse(unb64u(g.content));
-    data.photos=(data.photos||[]).filter(p=>p.file!==file);
-    await ghPut("gallery.json",b64u(JSON.stringify(data,null,2)),`Remove ${file} da galeria`,g.sha);
+    await updateGallery(d=>{ d.photos=(d.photos||[]).filter(p=>p.file!==file); }, `Remove ${file} da galeria`);
+    try{ const meta=await ghGet(file); if(meta&&meta.sha){ await ghDelete(file,meta.sha,`Remove arquivo ${file}`); } }catch(e){}
     st.textContent="Foto removida. O site atualiza em ~30 segundos.";
     loadList(); loadCities();
   }catch(e){ st.textContent="Erro: "+e.message; }
