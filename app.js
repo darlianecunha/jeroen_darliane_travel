@@ -1,7 +1,7 @@
 // Galeria Jeroen & Darliane — lê uma lista de fotos e agrupa por país e local.
-const COUNTRY_PT = { Netherlands:"Holanda", Belgium:"Bélgica", Germany:"Alemanha", Austria:"Áustria", Brazil:"Brasil", Other:"Outros" };
-const COUNTRY_FLAG = { Netherlands:"🇳🇱", Belgium:"🇧🇪", Germany:"🇩🇪", Austria:"🇦🇹", Brazil:"🇧🇷", Other:"📍" };
-const COUNTRY_ORDER = ["Netherlands","Belgium","Germany","Austria","Brazil","Other"];
+const COUNTRY_PT = { Netherlands:"Holanda", Belgium:"Bélgica", Germany:"Alemanha", Austria:"Áustria", Brazil:"Brasil", Portugal:"Portugal", Spain:"Espanha", Italy:"Itália", France:"França", "United Kingdom":"Reino Unido", England:"Inglaterra", Switzerland:"Suíça", Ireland:"Irlanda", "United States":"Estados Unidos", Denmark:"Dinamarca", Norway:"Noruega", Sweden:"Suécia", Greece:"Grécia", Poland:"Polônia", "Czech Republic":"República Tcheca", Hungary:"Hungria", Argentina:"Argentina", Other:"Outros" };
+const COUNTRY_FLAG = { Netherlands:"🇳🇱", Belgium:"🇧🇪", Germany:"🇩🇪", Austria:"🇦🇹", Brazil:"🇧🇷", Portugal:"🇵🇹", Spain:"🇪🇸", Italy:"🇮🇹", France:"🇫🇷", "United Kingdom":"🇬🇧", England:"🏴󠁧󠁢󠁥󠁮󠁧󠁿", Switzerland:"🇨🇭", Ireland:"🇮🇪", "United States":"🇺🇸", Denmark:"🇩🇰", Norway:"🇳🇴", Sweden:"🇸🇪", Greece:"🇬🇷", Poland:"🇵🇱", "Czech Republic":"🇨🇿", Hungary:"🇭🇺", Argentina:"🇦🇷", Other:"📍" };
+const COUNTRY_ORDER = ["Netherlands","Belgium","Germany","Austria","Switzerland","France","Italy","Spain","Portugal","United Kingdom","England","Ireland","Brazil","Other"];
 let flatPhotos = [];
 function slugify(s){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,""); }
 function countryRank(c){ const i=COUNTRY_ORDER.indexOf(c); return i===-1?COUNTRY_ORDER.length:i; }

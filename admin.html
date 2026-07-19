@@ -69,17 +69,11 @@
     <div class="row">
       <div><label>Cidade / local</label><input id="city" list="cities" placeholder="ex.: Amsterdam" /></div>
       <div><label>País</label>
-        <select id="country">
-          <option value="Netherlands">Holanda</option>
-          <option value="Belgium">Bélgica</option>
-          <option value="Germany">Alemanha</option>
-          <option value="Austria">Áustria</option>
-          <option value="Brazil">Brasil</option>
-          <option value="Other">Outro</option>
-        </select>
+        <input id="country" list="countries" placeholder="ex.: Holanda, Portugal…" />
       </div>
     </div>
     <datalist id="cities"></datalist>
+    <datalist id="countries"></datalist>
     <button class="btn-primary" id="sendBtn" onclick="upload()">Enviar foto</button>
     <div id="status"></div>
   </div>
@@ -106,7 +100,10 @@ function setStatus(type,msg){ const s=document.getElementById("status"); s.class
 function b64u(str){ return btoa(unescape(encodeURIComponent(str))); }
 function unb64u(str){ return decodeURIComponent(escape(atob(str.replace(/\n/g,"")))); }
 function slug(s){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"")||"foto"; }
-const PT={Netherlands:"Holanda",Belgium:"Bélgica",Germany:"Alemanha",Austria:"Áustria",Brazil:"Brasil",Other:"Outros"};
+const PT={Netherlands:"Holanda",Belgium:"Bélgica",Germany:"Alemanha",Austria:"Áustria",Brazil:"Brasil",Portugal:"Portugal",Spain:"Espanha",Italy:"Itália",France:"França","United Kingdom":"Reino Unido",Ireland:"Irlanda",Switzerland:"Suíça","United States":"Estados Unidos",Argentina:"Argentina",Denmark:"Dinamarca",Norway:"Noruega",Sweden:"Suécia",Greece:"Grécia",Poland:"Polônia","Czech Republic":"República Tcheca",Hungary:"Hungria",Other:"Outros"};
+const COUNTRY_LIST=["Netherlands","Belgium","Germany","Austria","Switzerland","France","Italy","Spain","Portugal","United Kingdom","Ireland","Brazil","Argentina","United States","Denmark","Norway","Sweden","Greece","Poland","Czech Republic","Hungary"];
+const NORM={"holanda":"Netherlands","paises baixos":"Netherlands","nederland":"Netherlands","netherlands":"Netherlands","belgica":"Belgium","belgium":"Belgium","alemanha":"Germany","germany":"Germany","deutschland":"Germany","austria":"Austria","brasil":"Brazil","brazil":"Brazil","suica":"Switzerland","switzerland":"Switzerland","franca":"France","france":"France","italia":"Italy","italy":"Italy","espanha":"Spain","spain":"Spain","espana":"Spain","portugal":"Portugal","reino unido":"United Kingdom","inglaterra":"United Kingdom","england":"United Kingdom","irlanda":"Ireland","ireland":"Ireland","estados unidos":"United States","eua":"United States","usa":"United States","argentina":"Argentina","dinamarca":"Denmark","noruega":"Norway","suecia":"Sweden","grecia":"Greece","polonia":"Poland","hungria":"Hungary"};
+function normCountry(v){ const t=(v||"").trim(); if(!t) return ""; const k=t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(); return NORM[k] || (t.charAt(0).toUpperCase()+t.slice(1)); }
 
 function tab(which){
   document.getElementById("panelAdd").classList.toggle("active",which==="add");
@@ -156,6 +153,9 @@ async function loadCities(){
     const data=JSON.parse(unb64u(g.content));
     const cities=[...new Set((data.photos||[]).map(p=>p.city))].sort();
     document.getElementById("cities").innerHTML=cities.map(c=>`<option value="${c}">`).join("");
+    const used=(data.photos||[]).map(p=>p.country);
+    const countries=[...new Set([...COUNTRY_LIST,...used])];
+    document.getElementById("countries").innerHTML=countries.map(c=>`<option value="${c}">${PT[c]||c}</option>`).join("");
   }catch(e){}
 }
 async function upload(){
@@ -163,9 +163,10 @@ async function upload(){
   if(!c.token||!c.owner||!c.repo){ setStatus("err","Preencha e salve a configuração primeiro."); return; }
   const file=document.getElementById("file").files[0];
   const city=document.getElementById("city").value.trim();
-  const country=document.getElementById("country").value;
+  const country=normCountry(document.getElementById("country").value);
   if(!file){ setStatus("err","Escolha uma foto."); return; }
   if(!city){ setStatus("err","Informe a cidade/local."); return; }
+  if(!country){ setStatus("err","Informe o país."); return; }
   btn.disabled=true;
   try{
     setStatus("info","Preparando a imagem…");
